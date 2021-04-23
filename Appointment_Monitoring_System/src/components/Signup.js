@@ -6,10 +6,22 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {postRegisterRequestData} from '../Api/create';
 import {Input, Button} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Signup = () => {
+  const [mobile, setMobile] = useState('');
+
+  const RegisterApi = async () => {
+    const data = {
+      mobileNumber: mobile,
+    };
+    await AsyncStorage.setItem('@mobileNumber', mobile);
+    await AsyncStorage.getItem('@mobileNumber');
+  };
   return (
     <>
       <View style={styles.container}>
@@ -18,11 +30,21 @@ const Signup = () => {
             <Input placeholder="+91" />
           </View>
           <View style={styles.inputRight}>
-            <Input placeholder="Mobile Number" />
+            <Input
+              onChangeText={e => {
+                setMobile(e);
+              }}
+              placeholder="Mobile Number"
+              maxLength={10}
+              keyboardType="numeric"
+            />
           </View>
         </View>
         <View style={styles.view}>
-          <Button title="Sign Up" buttonStyle={styles.button}></Button>
+          <Button
+            title="Sign Up"
+            onPress={RegisterApi}
+            buttonStyle={styles.button}></Button>
         </View>
       </View>
     </>
